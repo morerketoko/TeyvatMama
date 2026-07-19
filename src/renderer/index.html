@@ -76,6 +76,39 @@
             <input type="text" id="urlInput" class="url-input" placeholder="输入网址后按回车或点跳转">
             <button id="navigateBtn" class="control-btn">跳转</button>
           </div>
+          
+          <!-- 缩放控制 -->
+          <div class="zoom-controls">
+            <button id="zoomOutBtn" class="zoom-btn">-</button>
+            <span id="zoomValue" class="zoom-value">100%</span>
+            <button id="zoomInBtn" class="zoom-btn">+</button>
+          </div>
+          
+          <!-- 收藏夹 -->
+          <div class="bookmarks-section">
+            <div class="bookmarks-header">
+              <h3>收藏夹</h3>
+              <button id="addBookmarkBtn" class="add-bookmark-btn">+ 添加</button>
+            </div>
+            <div id="bookmarksList" class="bookmarks-list">
+              <div class="no-bookmarks">
+                <p>暂无收藏，点击上方按钮添加</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 添加收藏弹窗 -->
+          <div id="addBookmarkModal" class="modal hidden">
+            <div class="modal-content">
+              <h3>添加收藏</h3>
+              <input type="text" id="bookmarkTitle" class="modal-input" placeholder="标题">
+              <input type="text" id="bookmarkUrl" class="modal-input" placeholder="网址">
+              <div class="modal-buttons">
+                <button id="cancelAddBookmarkBtn" class="modal-btn cancel">取消</button>
+                <button id="confirmAddBookmarkBtn" class="modal-btn confirm">添加</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       

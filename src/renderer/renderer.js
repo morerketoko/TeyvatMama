@@ -20,6 +20,21 @@ const decreaseOpacityBtn = document.getElementById('decreaseOpacityBtn');
 const increaseOpacityBtn = document.getElementById('increaseOpacityBtn');
 const authorLink = document.getElementById('authorLink');
 
+// 收藏夹和缩放相关元素
+const zoomOutBtn = document.getElementById('zoomOutBtn');
+const zoomInBtn = document.getElementById('zoomInBtn');
+const zoomValue = document.getElementById('zoomValue');
+const bookmarksList = document.getElementById('bookmarksList');
+const addBookmarkBtn = document.getElementById('addBookmarkBtn');
+const addBookmarkModal = document.getElementById('addBookmarkModal');
+const bookmarkTitle = document.getElementById('bookmarkTitle');
+const bookmarkUrl = document.getElementById('bookmarkUrl');
+const cancelAddBookmarkBtn = document.getElementById('cancelAddBookmarkBtn');
+const confirmAddBookmarkBtn = document.getElementById('confirmAddBookmarkBtn');
+
+// 收藏夹数据
+let bookmarks = [];
+
 // 视图元素
 const views = {
   homeView: document.getElementById('homeView'),
@@ -145,6 +160,35 @@ function setupEventListeners() {
     window.electron.send('open-external-link', 'https://space.bilibili.com/3546947579283775');
   });
 
+  // 缩放控制
+  zoomOutBtn.addEventListener('click', () => {
+    window.electron.send('adjust-zoom', -0.1);
+  });
+
+  zoomInBtn.addEventListener('click', () => {
+    window.electron.send('adjust-zoom', 0.1);
+  });
+
+  // 收藏夹控制
+  addBookmarkBtn.addEventListener('click', () => {
+    showAddBookmarkModal();
+  });
+
+  cancelAddBookmarkBtn.addEventListener('click', () => {
+    hideAddBookmarkModal();
+  });
+
+  confirmAddBookmarkBtn.addEventListener('click', () => {
+    addBookmark();
+  });
+
+  // 点击模态框外部关闭
+  addBookmarkModal.addEventListener('click', (e) => {
+    if (e.target === addBookmarkModal) {
+      hideAddBookmarkModal();
+    }
+  });
+
   // 主进程消息监听
   window.electron.receive('browser-window-closed', () => {
     updateBrowserButtonState(false);
@@ -176,6 +220,15 @@ function setupEventListeners() {
     opacityValue.textContent = opacity.toFixed(1);
 
     gpuToggle.checked = enableGpu;
+  });
+
+  window.electron.receive('bookmarks-updated', (updatedBookmarks) => {
+    bookmarks = updatedBookmarks;
+    renderBookmarks();
+  });
+
+  window.electron.receive('zoom-level-changed', (level) => {
+    zoomValue.textContent = Math.round(level * 100) + '%';
   });
 }
 
@@ -360,8 +413,77 @@ function highlightShortcutAction(action) {
 document.addEventListener('DOMContentLoaded', () => {
   init();
   window.electron.send('get-initial-settings');
-  // 注意：由于无法直接从渲染进程知道播放器窗口是否已打开，
-  // 我们依赖主进程在窗口关闭时发送的消息来更新状态。
-  // 启动时，我们假定窗口是关闭的。
+  window.electron.send('get-bookmarks');
+  window.electron.send('get-zoom-level');
   updateBrowserButtonState(false);
-}); 
+});
+
+function showAddBookmarkModal() {
+  addBookmarkModal.classList.remove('hidden');
+  bookmarkTitle.value = '';
+  bookmarkUrl.value = '';
+  bookmarkTitle.focus();
+}
+
+function hideAddBookmarkModal() {
+  addBookmarkModal.classList.add('hidden');
+}
+
+function addBookmark() {
+  const title = bookmarkTitle.value.trim();
+  const url = bookmarkUrl.value.trim();
+  
+  if (!url) {
+    alert('请输入网址');
+    return;
+  }
+  
+  let fullUrl = url;
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    fullUrl = 'https://' + url;
+  }
+  
+  window.electron.send('add-bookmark', {
+    title: title || fullUrl,
+    url: fullUrl
+  });
+  
+  hideAddBookmarkModal();
+}
+
+function renderBookmarks() {
+  bookmarksList.innerHTML = '';
+  
+  if (bookmarks.length === 0) {
+    bookmarksList.innerHTML = '<div class="no-bookmarks"><p>暂无收藏，点击上方按钮添加</p></div>';
+    return;
+  }
+  
+  bookmarks.forEach(bookmark => {
+    const item = document.createElement('div');
+    item.className = 'bookmark-item';
+    item.innerHTML = `
+      <div class="bookmark-info">
+        <span class="bookmark-title">${escapeHtml(bookmark.title)}</span>
+        <span class="bookmark-url">${escapeHtml(bookmark.url)}</span>
+      </div>
+      <button class="bookmark-delete" data-id="${bookmark.id}">删除</button>
+    `;
+    
+    item.addEventListener('click', (e) => {
+      if (e.target.classList.contains('bookmark-delete')) {
+        window.electron.send('remove-bookmark', bookmark.id);
+      } else {
+        window.electron.send('navigate-to-bookmark', bookmark.url);
+      }
+    });
+    
+    bookmarksList.appendChild(item);
+  });
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+} 

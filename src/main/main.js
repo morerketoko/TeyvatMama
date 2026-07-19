@@ -68,12 +68,11 @@ const store = new Store({
       forward: 'F3',
       increaseOpacity: 'Control+Up',
       decreaseOpacity: 'Control+Down',
-      // 鼠标侧键示例（可选，用户可自定义）
-      // mouseSide1Action: 'XButton1',  // 鼠标侧键1
-      // mouseSide2Action: 'Shift+XButton2',  // Shift+鼠标侧键2
     },
     browserOpacity: 0.8,
-    enableGpuAcceleration: false
+    enableGpuAcceleration: false,
+    bookmarks: [],
+    zoomLevel: 1.0
   }
 });
 
@@ -417,6 +416,10 @@ function createBrowserWindow(url) {
   
   // 设置初始透明度
   browserWindow.setOpacity(store.get('browserOpacity'));
+  
+  // 设置初始缩放级别
+  const zoomLevel = store.get('zoomLevel', 1.0);
+  browserWindow.webContents.setZoomLevel(zoomLevel - 1);
 
   // 根据焦点状态智能调整透明度
   browserWindow.on('focus', () => {
@@ -682,6 +685,64 @@ ipcMain.on('get-topmost-status', (event) => {
     hasModule: highPriorityTopmost && highPriorityTopmost.isAvailable(),
     isWindowTopmost: browserWindow ? browserWindow.isAlwaysOnTop() : false
   });
+});
+
+ipcMain.on('add-bookmark', (event, bookmark) => {
+  const bookmarks = store.get('bookmarks', []);
+  if (!bookmarks.find(b => b.url === bookmark.url)) {
+    bookmarks.push({
+      id: Date.now(),
+      title: bookmark.title || '未命名',
+      url: bookmark.url,
+      icon: bookmark.icon || '',
+      createdAt: new Date().toISOString()
+    });
+    store.set('bookmarks', bookmarks);
+    if (mainWindow) {
+      mainWindow.webContents.send('bookmarks-updated', bookmarks);
+    }
+  }
+});
+
+ipcMain.on('remove-bookmark', (event, id) => {
+  const bookmarks = store.get('bookmarks', []);
+  const filtered = bookmarks.filter(b => b.id !== id);
+  store.set('bookmarks', filtered);
+  if (mainWindow) {
+    mainWindow.webContents.send('bookmarks-updated', filtered);
+  }
+});
+
+ipcMain.on('get-bookmarks', (event) => {
+  event.reply('bookmarks-updated', store.get('bookmarks', []));
+});
+
+ipcMain.on('navigate-to-bookmark', (event, url) => {
+  if (browserWindow) {
+    browserWindow.loadURL(url);
+    store.set('lastUrl', url);
+    browserWindow.show();
+  } else {
+    createBrowserWindow(url);
+  }
+});
+
+ipcMain.on('adjust-zoom', (event, delta) => {
+  let zoomLevel = store.get('zoomLevel', 1.0);
+  zoomLevel = Math.max(0.5, Math.min(2.0, zoomLevel + delta));
+  store.set('zoomLevel', zoomLevel);
+  
+  if (browserWindow) {
+    browserWindow.webContents.setZoomLevel(zoomLevel - 1);
+  }
+  
+  if (mainWindow) {
+    mainWindow.webContents.send('zoom-level-changed', zoomLevel);
+  }
+});
+
+ipcMain.on('get-zoom-level', (event) => {
+  event.reply('zoom-level-changed', store.get('zoomLevel', 1.0));
 });
 
 app.whenReady().then(() => {

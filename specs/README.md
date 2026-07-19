@@ -2,13 +2,25 @@
 
 ## 说明
 
-所有 Feature 开发前必须先创建 Spec。
+一个 Feature 一个目录。每个目录包含：
 
-Spec 是功能定义文档，不是实现文档。
+| 文件 | 职责 |
+|------|------|
+| spec.md | 功能规格（Goal -> Acceptance Criteria） |
+| todo.md | 开发任务清单 |
+| review.md | Code Review 记录 |
+| notes.md | 设计讨论和技术选型记录 |
 
-## 规范
+## 当前 Feature
 
-- 每个 Feature 一个 Spec 文件
-- 编号格式：NNN-feature-name.md
-- 引用模板 specs/template.md
-- 通过 Review 后才能开始实现
+| Feature | 目录 | 状态 | 优先级 |
+|---------|------|------|--------|
+| 收藏夹 | favorites/ | Spec 阶段 | P1 |
+| 下载管理 | download/ | 未开始 | P2 |
+| 窗口管理 | window/ | 未开始 | P2 |
+| 自动更新 | update/ | 未开始 | P1 |
+| 快捷键系统 | shortcuts/ | 已完成 | P0 |
+
+## 流程
+
+Idea -> Issue -> Spec -> Architecture Review -> Implementation -> Code Review -> Merge -> Update Docs -> Release

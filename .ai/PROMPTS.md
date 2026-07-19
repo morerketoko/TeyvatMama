@@ -1,8 +1,6 @@
 # Prompts
 
-预留 Prompt 管理目录。
-
-按分类索引，每个类别可存放标准 Prompt 模板：
+预留 Prompt 管理目录。按分类存放标准 Prompt 模板。
 
 ## Architecture
 
@@ -18,8 +16,8 @@ Code Review Prompt 模板。
 
 ## Feature
 
-功能开发 Prompt 模板（可引用 specs/template.md）。
+功能开发 Prompt 模板（引用 specs/template.md）。
 
 ## Release
 
-发版检查和相关 Prompt 模板。
+发版检查 Prompt 模板。

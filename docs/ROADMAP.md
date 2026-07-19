@@ -1,33 +1,41 @@
-﻿# Roadmap
+# Roadmap
 
-## v0.3.0 — Project Foundation & Code Quality
-- [ ] Repository reorganization (docs/.ai/specs structure)
-- [ ] Code formatting and linting setup (ESLint + Prettier)
-- [ ] Test framework integration
-- [ ] Add basic dev docs to docs/
-- [ ] Publish GitHub Pages with project docs
+## Alpha 阶段（当前）
 
-## v0.4.0 — Feature Maturity
-- [ ] Multi-tab browser support
-- [ ] Download manager
-- [ ] Custom themes/skins for the overlay
-- [ ] Mouse gesture support
-- [ ] Per-site shortcut profiles
+目标：验证核心体验，找到 PMF。
 
-## v0.5.0 — AI Integration
-- [ ] AI-powered video summarization
-- [ ] Smart recommendations based on viewing patterns
-- [ ] Voice control for shortcut actions
-- [ ] Auto-generated playlists from watched history
+- [>] 浮层浏览器窗口（已完成）
+- [>] 快捷键系统（已完成）
+- [>] 媒体控制（已完成）
+- [>] 收藏夹（已完成）
+- [>] 页面缩放（已完成）
+- [ ] 测试框架引入
+- [ ] ESLint + Prettier 统一风格
+- [ ] GPU 加速运行时切换
+- [ ] 自动更新机制
+- [ ] 下载管理器
 
-## v1.0.0 — Stable Release
-- [ ] Complete test coverage
-- [ ] Cross-platform support (macOS/Linux basics)
-- [ ] Plugin system
-- [ ] Public API documentation
-- [ ] i18n support (ZH/EN/JP)
+## Beta 阶段
 
-## Long-term Vision
-- Become the go-to overlay browser for all PC gamers
-- AI-driven content curation
-- Community plugin marketplace
+目标：功能完整、质量稳定、用户可依赖。
+
+- [ ] 多标签页支持
+- [ ] 主题系统（自定义皮肤）
+- [ ] 快捷键方案配置（per-game profile）
+- [ ] 媒体控制解耦（Site Adapter）
+- [ ] 国际化（zh/en）
+- [ ] 完整测试覆盖
+
+## Release 阶段
+
+目标：跨平台、开放生态、AI 增强。
+
+- [ ] macOS / Linux 基础支持
+- [ ] 插件系统
+- [ ] AI 视频摘要
+- [ ] AI 攻略推荐
+- [ ] 社区配置分享
+
+---
+
+> 详细的 Feature 清单见 docs/FEATURE_LIST.md

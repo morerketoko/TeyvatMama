@@ -1,21 +1,24 @@
-﻿# Current Task
+# Current Task
 
-## Status
+## Current Feature
 
-正在进行仓库结构重组，建立工程化文档体系。
+Issue-000: Initialize AI First Project Documentation Framework
 
-## Task
+## Goal
 
-将项目从零散的代码仓库升级为真正的 AI 工程。
-创建 docs/、.ai/、specs/ 目录结构，沉淀项目知识。
+建立 docs/.ai/specs 三层文档体系，使任何 AI 或开发者能在几分钟内理解项目。
 
-## Progress
+## Scope
 
-- [x] docs/ 文档创建完成（ARCHITECTURE, ROADMAP, STYLEGUIDE, IPC, TECH_DEBT, CHANGELOG, CONTRIBUTING）
-- [x] .ai/ 上下文文件创建中
-- [ ] specs/ 功能规格创建
-- [ ] 推送到 morerketoko/TeyvatMama
+仅创建文档结构，不涉及任何业务代码修改。
 
-## Next Step
+## Definition of Done
 
-完成 .ai/ 和 specs/ 文件后，提交并推送代码。
+- [x] docs/ 全部文档创建完成
+- [x] .ai/ 全部上下文文件创建完成
+- [x] specs/ 模板和说明创建完成
+- [x] 推送到 GitHub 仓库
+
+## Risks
+
+无。本次任务不涉及代码变更。

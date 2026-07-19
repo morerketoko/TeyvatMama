@@ -1,40 +1,37 @@
 ﻿# Contributing
 
-## Getting Started
+## 开发流程
 
-1. Fork the repository
-2. Clone your fork
-3. Install dependencies:
-   `ash
-   npm config set registry https://registry.npmmirror.com
-   npm install
-   cd src/native && npm install && npx node-gyp rebuild --release
-   cd ../..
-   `
-4. Run in admin mode: 
-pm start
+1. 确认 .ai/CURRENT_TASK.md 了解当前任务
+2. 确认 specs/ 中对应的 Feature Spec
+3. 基于 spec 实现功能
+4. 遵循 STYLEGUIDE.md 编码规范
+5. 更新 .ai/DEVLOG.md 记录进度
+6. 更新 docs/CHANGELOG.md 记录变更
 
-## Development Workflow
+## PR 流程
 
-1. Check specs/ for the latest feature specs
-2. Read .ai/CURRENT_TASK.md to see what's being worked on
-3. Read .ai/CODING_RULES.md for AI-specific rules
-4. Create a feature branch: git checkout -b feature/<name>
-5. Implement following docs/STYLEGUIDE.md
-6. Submit a PR
+1. 从 master 创建 Feature 分支：git checkout -b feat/<name>
+2. 提交小粒度、聚焦的 commit
+3. 提交 PR 时关联对应 Spec 编号
+4. 确保 CI 通过
+5. 至少一人 Code Review 后合并
 
-## PR Guidelines
+## Code Review
 
-- Keep PRs focused on one feature/fix
-- Update relevant .ai/ context files if behavior changes
-- Update docs/CHANGELOG.md with changes
-- Add a spec to specs/ for new features
+Review 时关注：
 
-## Reporting Issues
+- 架构合理性：是否遵循现有架构分层
+- 命名规范：是否符合 STYLEGUIDE
+- 性能影响：是否有不必要的开销
+- 可维护性：代码是否清晰、可测试
+- 安全性：IPC 通道是否在白名单内
+- 异常处理：原生模块调用是否有降级
 
-Use GitHub Issues. Include:
-- TeyvatMama version
-- Windows version
-- Game being played (if relevant)
-- Steps to reproduce
-- Screenshots (if applicable)
+## Feature Workflow
+
+1. 创建 Spec：在 specs/ 中编写功能规格
+2. 规划：在 .ai/NEXT_TASK.md 中记录计划
+3. 实现：按 Spec 编码
+4. Review：提交 Code Review
+5. 归档：更新 .ai/ 相关文件

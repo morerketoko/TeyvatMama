@@ -1,18 +1,35 @@
-﻿# Code Review Notes
+# Review Notes
 
-## Review History
+## Review 模板
 
-### 2025-01-08: v0.2.0 发布 Review
+### [日期] - [功能/模块名称]
 
-**结构改进**
-- 将快捷键和置顶功能分离为独立 C++ 模块，模块化设计更清晰
-- 每个模块有 JS wrapper，提供 fallback 降级
+| 维度 | 评价 |
+|------|------|
+| Architecture | |
+| Naming | |
+| Performance | |
+| Maintainability | |
+| Security | |
+| Future | |
 
-**问题发现**
-- GPU 硬解全局禁用，无运行时切换能力
-- CSS 全部集中在 styles.css 中，不易维护
-- 媒体控制脚本硬编码 B 站 DOM 选择器
+**总结**:
 
-**建议**
-- 引入 CSS Modules 或按组件拆分样式文件
-- 建立 site-adapter 机制解耦媒体控制
+
+
+## Review 记录
+
+### 2025-01-08 - v0.2.0 发布 Review
+
+| 维度 | 评价 |
+|------|------|
+| Architecture | 快捷键和置顶分离为独立 C++ 模块，模块化设计清晰 |
+| Naming | 命名一致 |
+| Performance | GPU 硬解全局禁用，无运行时切换 |
+| Maintainability | CSS 全部集中在 styles.css；媒体控制硬编码 B 站 DOM |
+| Security | 通过白名单 IPC 通道，安全合规 |
+| Future | 缺乏测试和自动更新机制 |
+
+**总结**:
+
+v0.2.0 功能层面完成度高，但工程化和可维护性需要加强。下一步重点是测试、lint、文档体系。

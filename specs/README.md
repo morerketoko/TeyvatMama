@@ -1,22 +1,14 @@
-﻿# Feature Specs
+# Specs 目录
 
-This directory contains one spec per feature. Each spec follows a consistent structure:
+## 说明
 
-- **Description**: What the feature does
-- **Current Implementation**: How it's implemented now
-- **Key Features**: What it provides
-- **Future Improvements**: Planned enhancements
+所有 Feature 开发前必须先创建 Spec。
 
-## Spec Index
+Spec 是功能定义文档，不是实现文档。
 
-| #   | Name              | Status    | Priority |
-|-----|-------------------|-----------|----------|
-| 001 | Home/Settings     | Live      | P0       |
-| 002 | Browser/Player    | Live      | P0       |
-| 003 | Bookmarks         | Live      | P1       |
-| 004 | Download Manager  | Planned   | P2       |
-| 005 | Shortcut System   | Live      | P0       |
+## 规范
 
-## Template for New Specs
-
-Template: Description, Current Implementation, Key Features, Future Improvements.
+- 每个 Feature 一个 Spec 文件
+- 编号格式：NNN-feature-name.md
+- 引用模板 specs/template.md
+- 通过 Review 后才能开始实现

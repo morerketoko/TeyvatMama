@@ -1,32 +1,31 @@
-﻿# TeyvatMama Project Context
+# Project
 
-## Identity
+## 目标
 
-TeyvatMama 是一个基于 Electron 的游戏浮层浏览器。
-原名 Teyvat Browser，现已迁移至 TeyvatMama 仓库。
+为 PC 游戏玩家提供一个浮层浏览器，支持在全屏游戏中保持置顶。
 
-## Core Concepts
+## 定位
 
-- **Main process**: Electron 主进程，负责窗口管理、原生模块、IPC
-- **Renderer**: 设置面板 UI，嵌入浏览器窗口
-- **Native modules**: C++ addons (node-gyp) 提供系统级键盘钩子和 UIAccess 置顶
-- **IPC Bridge**: preload.js 白名单通信
+游戏辅助工具。不是通用浏览器，不是游戏修改器。
 
-## Important Files
+## 技术栈
 
-- src/main/main.js — 主进程逻辑（窗口、IPC、快捷键）
-- src/main/preload.js — IPC 桥接
-- src/renderer/ — 渲染进程（HTML/CSS/JS）
-- src/native/ — C++ 原生模块
-- package.json — 项目配置和依赖
-
-## Current Version
-
-0.2.0 — 已实现全屏游戏置顶、收藏夹、缩放功能
-
-## Tech Stack
-
-- Electron 27.x
+- Electron 27+
 - C++ (node-gyp, Windows API)
-- electron-store (持久化)
+- electron-store
 - GitHub Actions CI
+
+## 原则
+
+1. 不触发游戏反作弊系统
+2. 所有操作可通过键盘完成
+3. 不影响游戏性能
+4. 零配置开箱即用
+5. 每次开发沉淀为文档
+
+## 禁止事项
+
+- 禁止修改游戏文件或进程
+- 禁止读取游戏内存数据
+- 禁止自动联网更新（用户手动确认）
+- 禁止收集用户隐私数据

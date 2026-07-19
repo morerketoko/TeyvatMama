@@ -1,39 +1,22 @@
 ﻿# Technical Debt
 
-## Known Issues
+## 模板
 
-1. **GPU hardware acceleration disabled globally**
-   - pp.disableHardwareAcceleration() is called unconditionally
-   - This hurts performance for normal desktop use
-   - Should be a runtime toggle rather than app-level switch
+每次发现技术债时按以下格式记录：
 
-2. **No test coverage**
-   - Zero tests exist for main process, renderer, or native modules
-   - Manual testing is the only QA process
+`
+| 发现时间 | 模块 | 影响 | 优先级 | 计划解决版本 |
+|----------|------|------|--------|--------------|
+| YYYY-MM-DD | 模块名 | 问题说明 | P0/P1/P2 | vX.Y.Z |
+`
 
-3. **Hardcoded Bilibili optimization**
-   - Media control scripts are tightly coupled to Bilibili's DOM structure
-   - Should use a plugin/selector-based approach for site-specific controls
+## 债务清单
 
-4. **Global shortcut scope**
-   - globalShortcut registers system-wide hotkeys
-   - No per-profile or per-game shortcut configurations possible
-
-5. **CSS in single file**
-   - All styles in src/renderer/assets/styles.css (~13KB)
-   - Difficult to maintain as the app grows
-
-6. **Native module error handling**
-   - C++ modules may crash the main process if they throw unhandled exceptions
-   - Need better isolation (separate process?)
-
-7. **No update mechanism**
-   - publish: null in electron-builder config
-   - Users must manually download new versions
-
-## Improvement Priorities
-- P0: Add test infrastructure
-- P1: Make GPU toggle per-window instead of global
-- P1: Add auto-updater
-- P2: Refactor CSS into modular components
-- P2: Abstract media controls into site-specific plugins
+| 发现时间 | 模块 | 影响 | 优先级 | 计划解决版本 |
+|----------|------|------|--------|--------------|
+| 2025-01-08 | Main Process | GPU 硬件加速全局禁用，无运行时切换能力 | P1 | v0.3.0 |
+| 2025-01-08 | 项目全局 | 无测试覆盖，质量无法保障 | P0 | v0.3.0 |
+| 2025-01-08 | Renderer | 媒体控制硬编码 B 站 DOM 选择器 | P2 | v0.4.0 |
+| 2025-01-08 | Renderer | 全部 CSS 集中于 styles.css，难以维护 | P2 | v0.4.0 |
+| 2025-01-08 | Native | C++ 模块缺少隔离机制，异常可导致主进程崩溃 | P1 | v0.3.0 |
+| 2025-01-08 | Build | publish: null，无自动更新机制 | P1 | v0.3.0 |

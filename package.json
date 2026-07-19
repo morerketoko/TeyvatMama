@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "electron": "^27.0.0",
-    "electron-builder": "^24.6.4"
+    "electron-builder": "^24.6.4",
+    "electron-rebuild": "^3.2.9"
   },
   "optionalDependencies": {
     "high-priority-modules": "file:./src/native"
@@ -40,18 +41,30 @@
     },
     "files": [
       "src/**/*",
-      "package.json"
+      "package.json",
+      "!src/native/build/**/*.node"
+    ],
+    "extraResources": [
+      {
+        "from": "src/native/build/Release/",
+        "to": "app.asar.unpacked/src/native/build/Release/",
+        "filter": ["*.node"]
+      }
     ],
     "publish": null,
     "win": {
       "target": [
         {
           "target": "dir",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "icon": "src/renderer/assets/logo.png"

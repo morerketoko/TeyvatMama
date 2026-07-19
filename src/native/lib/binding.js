@@ -2,13 +2,24 @@ const path = require('path');
 
 let native = null;
 
-try {
-  // 尝试加载编译后的C++模块
-  native = require('../build/Release/high_priority_shortcut.node');
-} catch (err) {
-  // 如果加载失败，给出错误信息
-  console.error('Failed to load high_priority_shortcut module:', err);
-  // 提供回退实现
+function loadNativeModule(moduleName) {
+  const unpackedPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'src', 'native', 'build', 'Release', moduleName);
+  const localPath = path.join(__dirname, '..', 'build', 'Release', moduleName);
+  
+  try {
+    if (process.resourcesPath && require('fs').existsSync(unpackedPath)) {
+      return require(unpackedPath);
+    }
+    return require(localPath);
+  } catch (err) {
+    console.error(`Failed to load ${moduleName}:`, err);
+    return null;
+  }
+}
+
+native = loadNativeModule('high_priority_shortcut.node');
+
+if (!native) {
   native = {
     start: () => { console.warn('C++ module not available, shortcuts disabled'); },
     stop: () => { console.warn('C++ module not available'); }

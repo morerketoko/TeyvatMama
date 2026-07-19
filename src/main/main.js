@@ -1,4 +1,16 @@
-const { app, BrowserWindow, ipcMain, Menu, globalShortcut, screen, shell } = require('electron');
+const { app } = require('electron');
+
+app.commandLine.appendSwitch('--disable-gpu');
+app.commandLine.appendSwitch('--disable-gpu-compositing');
+app.commandLine.appendSwitch('--disable-gpu-sandbox');
+app.commandLine.appendSwitch('--enable-software-rasterizer');
+app.commandLine.appendSwitch('--force-cpu-draw');
+app.commandLine.appendSwitch('--no-sandbox');
+app.commandLine.appendSwitch('--disable-setuid-sandbox');
+
+app.disableHardwareAcceleration();
+
+const { BrowserWindow, ipcMain, Menu, globalShortcut, screen, shell } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
 
@@ -10,7 +22,6 @@ try {
   console.log('Successfully loaded high-priority shortcut module');
 } catch (err) {
   console.log('Failed to load high-priority shortcut module:', err);
-  // 提供一个后备实现，避免破坏应用功能
   highPriorityShortcut = {
     installHook: () => { console.warn('C++ shortcuts not available, using fallback'); },
     registerShortcuts: () => { console.warn('C++ shortcuts not available'); },
@@ -23,7 +34,6 @@ try {
   console.log('Successfully loaded high-priority topmost module');
 } catch (err) {
   console.log('Failed to load high-priority topmost module:', err);
-  // 提供一个后备实现
   highPriorityTopmost = {
     startMonitoring: () => { console.warn('C++ topmost not available'); return false; },
     stopMonitoring: () => { console.warn('C++ topmost not available'); return false; },
@@ -67,10 +77,7 @@ const store = new Store({
   }
 });
 
-// 根据设置决定是否禁用GPU硬件加速
-if (!store.get('enableGpuAcceleration')) {
-  app.disableHardwareAcceleration();
-}
+
 
 // 主窗口和播放器窗口
 let mainWindow = null;
@@ -287,6 +294,22 @@ function createMainWindow() {
   mainWindow.removeMenu(); // 彻底移除菜单栏，包括Electron默认的菜单
 
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error('Failed to load main window:', {
+      errorCode,
+      errorDescription,
+      validatedURL
+    });
+  });
+
+  mainWindow.webContents.on('render-process-gone', (event, details) => {
+    console.error('Render process crashed:', details);
+  });
+
+  mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log(`[Renderer Console] ${message} (${sourceId}:${line})`);
+  });
 
   mainWindow.on('resize', () => {
     const { width, height } = mainWindow.getBounds();

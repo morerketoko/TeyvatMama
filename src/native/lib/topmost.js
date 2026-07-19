@@ -2,12 +2,24 @@ const path = require('path');
 
 let native = null;
 
-try {
-  // Try to load the compiled C++ module
-  native = require('../build/Release/high_priority_topmost.node');
-} catch (err) {
-  console.error('Failed to load high_priority_topmost module:', err);
-  // Provide fallback implementation
+function loadNativeModule(moduleName) {
+  const unpackedPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'src', 'native', 'build', 'Release', moduleName);
+  const localPath = path.join(__dirname, '..', 'build', 'Release', moduleName);
+  
+  try {
+    if (process.resourcesPath && require('fs').existsSync(unpackedPath)) {
+      return require(unpackedPath);
+    }
+    return require(localPath);
+  } catch (err) {
+    console.error(`Failed to load ${moduleName}:`, err);
+    return null;
+  }
+}
+
+native = loadNativeModule('high_priority_topmost.node');
+
+if (!native) {
   native = {
     startWindowMonitoring: () => { 
       console.warn('C++ topmost module not available, window monitoring disabled'); 

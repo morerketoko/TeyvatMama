@@ -1,0 +1,1 @@
+# Notes - IS-001\n\n## 设计讨论\n\nInputService 不直接加载 native 模块，而是通过 setNativeModule() 注入。\n这样在测试时可以注入 mock 对象。\n\n## 技术选型\n\n使用 Map 存储 action -> handler 映射，O(1) 查找。\n使用 fallback 对象，C++ 模块不可用时静默降级。\n\n## 注意事项\n\n- loadShortcuts 必须在 registerAction 之后调用\n- destroy() 必须在 app.will-quit 中调用\n- 后续 Priority / Context / Macro 可以在 InputService 上扩展\n

@@ -1,3 +1,5 @@
+﻿process.env['ELECTRON_DISABLE_SANDBOX'] = '1';
+
 const { app } = require('electron');
 
 app.commandLine.appendSwitch('--disable-gpu');
@@ -460,6 +462,19 @@ function createBrowserWindow(url) {
   }
   
 
+
+  // 添加渲染进程错误监听
+  browserWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error('Failed to load browser window:', { errorCode, errorDescription, validatedURL });
+  });
+
+  browserWindow.webContents.on('render-process-gone', (event, details) => {
+    console.error('Browser render process crashed:', details);
+  });
+
+  browserWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log([Browser Renderer]  (:));
+  });
 }
 
 function toggleBrowserVisibility() {
